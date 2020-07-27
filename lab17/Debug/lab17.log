@@ -1,0 +1,6 @@
+﻿  queue.ipp
+main.obj : error LNK2019: ссылка на неразрешенный внешний символ "public: __thiscall queue<int>::~queue<int>(void)" (??1?$queue@H@@QAE@XZ) в функции _main
+main.obj : error LNK2019: ссылка на неразрешенный внешний символ "public: void __thiscall queue<int>::enque(int)" (?enque@?$queue@H@@QAEXH@Z) в функции _main
+main.obj : error LNK2019: ссылка на неразрешенный внешний символ "public: class queue<int> __thiscall queue<int>::operator=(class queue<int> &)" (??4?$queue@H@@QAE?AV0@AAV0@@Z) в функции _main
+main.obj : error LNK2019: ссылка на неразрешенный внешний символ "class std::basic_ostream<char,struct std::char_traits<char> > & __cdecl operator<<<int>(class std::basic_ostream<char,struct std::char_traits<char> > &,class queue<int> &)" (??$?6H@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@std@@AAV01@AAV?$queue@H@@@Z) в функции _main
+C:\Users\pro_1\source\repos\lab17\Debug\lab17.exe : fatal error LNK1120: неразрешенных внешних элементов: 4
