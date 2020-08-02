@@ -20,7 +20,14 @@ namespace UnitTest1
 				a.enque(arr[i]);
 			}
 			for (int i = 0; i < 10; i++) {
-				Assert::IsTrue(a.deque() == arr[i]);
+				Assert::AreEqual(a.deque(),arr[i]);
+			}
+			try {
+				a.deque();
+				Assert::IsFalse(true);
+			}
+			catch (...) {           
+				Assert::IsTrue(true);
 			}
 		}
 		TEST_METHOD(TestSize)
@@ -32,7 +39,7 @@ namespace UnitTest1
 			a.enque(b);
 			a.enque(c);
 			a.enque(d);
-			Assert::IsTrue(3 == a.getSize());
+			Assert::AreEqual(3, a.getSize());
 		}
 		TEST_METHOD(Test_)
 		{
@@ -45,7 +52,7 @@ namespace UnitTest1
 			}
 			b = a;
 			for (int i = 0; i < 10; i++) 
-				Assert::IsTrue(a.deque() == b.deque());
+				Assert::AreEqual(a.deque(), b.deque());
 		}
 	};
 }
