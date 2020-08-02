@@ -1,99 +1,88 @@
 #ifdef QUEUE
+#include <new>
+#include <cstdlib>
 template <class T>
 inline queue<T> ::queue(queue& obj) {
-	node* cur2 = obj.head;
-	node* n = nullptr;
+	node<T>* cur2 = obj.head;
+	node<T>* n = nullptr;
 	try {
-		n = new node;
+		n = new node<T>;
 	}
-	catch (const bad_alloc& e) {
-		throw bad_alloc(e);
-	}
-
+	catch (const bad_alloc& e) { throw const bad_alloc(e); }
 	n->value = cur2->value;
-	n->next = NULL;
+	n->next = nullptr;
 	head = n;
-	last = n;
+	tail = n;
 	size = 1;
 	int i = obj.getSize();
 	cur2 = cur2->next;
 	while (size < i) {
 		try {
-			n = new node;
-		}
+			n = new node<T>;
+		} 
 		catch (const bad_alloc& e) {
+			delete this;
 			throw bad_alloc(e);
 		}
 		n->value = cur2->value;
 		n->next = NULL;
-		last->next = n;
-		last = n;
+		tail->next = n;
+		tail = n;
 		size++;
 	}
 };
 
 template <class T>
 inline queue<T>::~queue() {
-	node* cur = head;
-	node* prev = cur;
+	node<T>* cur = head;
+	node<T>* prev = cur;
 	while (cur) {
 		cur = cur->next;
 		delete prev;
 		prev = cur;
 	}
+	tail = head = nullptr;
+	size = 0;
 };
 
 template<class T>
-inline void queue<T> ::enque(T obj) {
-	if (!size && !last) {
-		node* n = nullptr;
-		try {
-			n = new node;
+inline void queue<T> ::enque(T& obj) {
+	if (size) {
+		if (tail->next) {
+			tail->next->value = obj;
+			tail = tail->next;
+		}
+		else {
+			node<T>* n;
+			try {  n = new node<T>;
+			}
+			catch (const bad_alloc& e) {
+				throw bad_alloc(e);
+			}
+			n->value = obj;
+			n->next = nullptr;
+			tail->next = n;
+			tail = n;
+		}
+	}
+	else {
+		if (!head)  try {
+			head = new node<T>;
 		}
 		catch (const bad_alloc& e) {
 			throw bad_alloc(e);
 		}
-		n->value = obj;
-		n->next = NULL;
-		head = n;
-		last = n;
-		size++;
-		return;
-	}
-	if (!size && last) {
 		head->value = obj;
-		last = head;
-		size++;
-		return;
+		head->next = nullptr;
+		tail = head;
 	}
-	if (!(last->next)) {
-		node* n = nullptr;
-		try {
-			n = new node;
-		}
-		catch (const bad_alloc& e) {
-			throw bad_alloc(e);
-		}
-		n->value = obj;
-		n->next = NULL;
-		last->next = n;
-		last = n;
-		size++;
-		return;
-	}
-	else
-	{
-		last->next->value = obj;
-		last = last->next;
-		size++;
-		return;
-	}
+	size++;
 };
 
 template <class T>
 inline T queue<T> ::deque() {// добавить исключение
 	if (!size) throw (std::out_of_range("we dont have elements"));
-	node* cur = head;
+	node<T>* cur = head;
 	T val = cur->value;
 	head = head->next;
 	size--;
@@ -102,45 +91,45 @@ inline T queue<T> ::deque() {// добавить исключение
 };
 
 template <class T>
-inline ostream& operator << (ostream& os, queue<T>& obj) {
-	obj.tmp = obj.head;
+inline ostream& operator << (ostream& os, queue <T> const & obj) {
+	node<T>* cur = obj.head;
 	int i = 0;
 	int n = obj.getSize();
 	while (i < n) {
-		os << obj.tmp->value << "\n";
-		obj.tmp = obj.tmp->next;
+		os << cur->value << "\n";
+		cur = cur->next;
 		i++;
 	}
 	return os;
 };
 
 template <class T>
-inline queue<T>& queue<T> :: operator = (queue<T>& obj) {
+inline queue<T>& queue<T> :: operator = (const queue <T>& obj) {
 	if (this == &obj) return *this;
 	if (size) {
-		node* cur = head;
-		node* prev = cur;
+		node<T>* cur = head;
+		node<T>* prev = cur;
 		while (cur) {
 			cur = cur->next;
 			delete prev;
 			prev = cur;
 		}
 	}
-	node* cur2 = obj.head;
-	node* c = new node;
+	node<T>* cur2 = obj.head;
+	node<T>* c = new node<T>;
 	c->value = cur2->value;
-	c->next = NULL;
+	c->next = nullptr;
 	head = c;
-	last = c;
+	tail = c;
 	size = 1;
 	cur2 = cur2->next;
 	int i = 1;
 	while (i < obj.getSize()) {
-		c = new node;
+		c = new node<T>;
 		c->value = cur2->value;
-		c->next = NULL;
-		last->next = c;
-		last = c;
+		c->next = nullptr;
+		tail->next = c;
+		tail = c;
 		size++;
 		cur2 = cur2->next;
 		i++;
@@ -149,3 +138,4 @@ inline queue<T>& queue<T> :: operator = (queue<T>& obj) {
 };
 
 #endif 
+

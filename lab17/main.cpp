@@ -33,14 +33,26 @@ int main() {
 	}
 	catch (out_of_range& e) { cerr << e.what(); }*/
 	queue<int> a;
-	a.enque(1);
-	a.enque(2);
-	a.enque(3);
+	int c = 1;
+	int d = 2;
+	int e = 3;
+	try {
+		a.enque(c);
+		a.enque(d);
+		a.enque(e);
+	}
+	catch (bad_alloc& e) { cerr << e.what();}
 	queue<int> b;
-	b.enque(3);
-	b.enque(2);
-	b.enque(1);
+	try {
+		b.enque(e);
+		b.enque(d);
+		b.enque(c);
+	}
+	catch (bad_alloc& e) { cerr << e.what(); }
 	a = b;
+	cout << a << "\n\n";
+	a.deque();
+	cout << a;
 	try {
 		b.deque();
 		b.deque();
@@ -48,6 +60,6 @@ int main() {
 		b.deque();
 	}
 	catch (out_of_range& e) { cerr << e.what(); }
-	cout << a;
+	cout <<"\n\n" <<  b <<"\n\n" << b.getSize();
 	return 0;
 }
