@@ -5,8 +5,10 @@ template <class T>
 inline queue<T> ::queue(queue& obj) {
 	node<T>* cur2 = obj.head;
 	node<T>* n = nullptr;
-	n = new(nothrow)node<T>;
-	if (!n) exit(EXIT_FAILURE);
+	try {
+		n = new node<T>;
+	}
+	catch (const bad_alloc& e) { throw const bad_alloc(e); }
 	n->value = cur2->value;
 	n->next = nullptr;
 	head = n;
@@ -15,10 +17,12 @@ inline queue<T> ::queue(queue& obj) {
 	int i = obj.getSize();
 	cur2 = cur2->next;
 	while (size < i) {
-		n = new (nothrow) node<T>;
-		if (!n) {
+		try {
+			n = new node<T>;
+		} 
+		catch (const bad_alloc& e) {
 			delete this;
-			exit(EXIT_FAILURE);
+			throw bad_alloc(e);
 		}
 		n->value = cur2->value;
 		n->next = NULL;
@@ -37,6 +41,8 @@ inline queue<T>::~queue() {
 		delete prev;
 		prev = cur;
 	}
+	tail = head = nullptr;
+	size = 0;
 };
 
 template<class T>
