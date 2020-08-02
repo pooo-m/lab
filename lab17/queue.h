@@ -2,35 +2,31 @@
 #define QUEUE
 #include <iostream>
 using namespace std;
+template <class T>
+struct node {
+	T value;
+	node* next;
+};
 
 template <class T> class queue {
-	struct node {
-		T value;
-		node* next;
-	};
-	node* tmp;
-	node* head;
-	node* last;
-	int size;
+	node<T>* head;
+	node<T>* tail;
+	size_t size;
 public:
 	queue() {
-		head = last = tmp = NULL;
+		head = tail = nullptr;
 		size = 0;
 	}
 
 	queue(queue<T>& obj);
 	~queue();
-	void enque(T obj);
+	void enque(T& obj);
 	T deque();
-	int getSize() { return size; };
+	int getSize() const { return size; };
 	void clear() { size = 0; }
-	queue<T>& operator = (queue<T>& obj);
-	template <class T> friend ostream& operator << (ostream& os, queue<T>& obj);
+	queue<T>& operator = (const queue<T>& obj);
+	template <class T> friend ostream& operator << (ostream& os, queue<T> const & obj);
 };
-
-
-
-
 #include "queue.ipp"
 #endif
 /*struct Point {
